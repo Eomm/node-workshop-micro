@@ -94,4 +94,4 @@ module.exports = async function (app, opts) {
   })
 }
 
-module.exports.autoPrefix = '/tickets'
+// module.exports.autoPrefix = '/tickets'

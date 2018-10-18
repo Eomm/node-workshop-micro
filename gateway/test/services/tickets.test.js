@@ -47,7 +47,7 @@ testWithLogin('create and get ticket', async (t, inject) => {
   const body1 = JSON.parse(res1.body)
 
   t.ok(body1._id)
-  const url = `/tickets/${body1._id}`
+  const url = `${body1._id}`
   t.equal(res1.headers.location, url)
 
   const res2 = await inject({
