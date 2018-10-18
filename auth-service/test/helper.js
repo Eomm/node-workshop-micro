@@ -4,7 +4,7 @@
 // between our tests.
 
 const Fastify = require('fastify')
-const App = require('../app')
+const TicketService = require('../services/tickets')
 
 const AuthJwt = require('fastify-jwt')
 const MongoDB = require('fastify-mongodb')
@@ -40,7 +40,7 @@ tearDown(async function () {
 function config() {
   return {
     auth: {
-      secret: 'thisisalongsecretjustfortests'
+      secret: 'averyverylongsecret'
     },
     mongodb: {
       client,
@@ -51,9 +51,12 @@ function config() {
 
 // automatically build and tear down our instance
 function build(t) {
-  const app = Fastify({ logger: !true })
+  const app = Fastify()
 
-  app.register(App)
+  app.register(AuthJwt, config().auth)
+  app.register(MongoDB, config().mongodb)
+
+  app.register(TicketService)
 
   t.tearDown(app.close.bind(app))
 
@@ -62,24 +65,7 @@ function build(t) {
 
 async function createUser(t, app, { username, password }) {
   await app.ready()
-
-  const res = await app.inject({
-    url: '/users/signup',
-    method: 'POST',
-    body: {
-      username,
-      password
-    }
-  })
-
-  t.deepEqual(res.statusCode, 200)
-  const body = JSON.parse(res.body)
-  t.match(body, { status: 'ok' })
-
-  const token = body.token
-  t.ok(token)
-
-  return token
+  return app.jwt.sign({ username, password })
 }
 
 function testWithLogin(name, fn) {

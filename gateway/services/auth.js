@@ -1,6 +1,13 @@
 'use strict'
 
-const AuthMongoJwt = require('@matteo.collina/fastify-auth-mongo-jwt')
+const HttpProxy = require('fastify-http-proxy')
 
-// needs to be defined with fastify-plugin if we are wrapping it
-module.exports = AuthMongoJwt
+module.exports = async function (app, opts) {
+  app.register(HttpProxy, {
+    upstream: 'http://localhost:3002/',
+    http2: false // optional
+  })
+}
+
+module.exports.autoPrefix = '/users'
+
