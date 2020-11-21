@@ -39,6 +39,10 @@ jobs:
       - run: npm i releasify --no-save
       - run: cp ./monkey.js ./node_modules/releasify/lib/commands/publish.js
       - run: cp ./monkey-npm.js ./node_modules/releasify/lib/npm.js
+      - name: 'check it should work'
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: echo "TOK=$NPM_TOKEN" | head -c 6
       - name: 'release now'
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
