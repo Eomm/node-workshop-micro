@@ -44,4 +44,5 @@ jobs:
             --verbose debug \
             --semver ${{github.event.inputs.semver}} \
             --remote ${{github.event.inputs.remote}} \
-            --branch ${{github.event.inputs.branch}}
+            --branch ${{github.event.inputs.branch}} \
+            --gh-token ${{secrets.GITHUB_TOKEN}}
