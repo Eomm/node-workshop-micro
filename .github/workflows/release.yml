@@ -38,6 +38,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - run: npm i releasify --no-save
       - run: cp ./monkey.js ./node_modules/releasify/lib/commands/publish.js
+      - run: cp ./monkey-npm.js ./node_modules/releasify/lib/npm.js
       - run: |
           ./node_modules/.bin/releasify \
             publish \
