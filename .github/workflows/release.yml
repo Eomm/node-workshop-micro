@@ -54,4 +54,5 @@ jobs:
             --semver ${{github.event.inputs.semver}} \
             --remote ${{github.event.inputs.remote}} \
             --branch ${{github.event.inputs.branch}} \
+            --npm-otp ${{github.event.inputs.npmOtp}} \
             --gh-token ${{secrets.GITHUB_TOKEN}}
