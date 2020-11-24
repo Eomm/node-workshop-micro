@@ -43,6 +43,10 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: echo "TOK=$NPM_TOKEN" | head -c 6
+      - run: npm config set //registry.npmjs.org/:_authToken=${NPM_TOKEN}
+        env:
+          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
+      - run: npm whoami
       - name: 'release now'
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
