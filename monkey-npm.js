@@ -56,7 +56,6 @@ module.exports = function npmWrapper (cwd) {
       }
 
       if (otp) {
-        console.log({ otp })
         args.push('--otp')
         args.push(otp)
       }
