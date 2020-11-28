@@ -15,9 +15,6 @@ on:
         description: "The branch you want to release"
         required: true
         default: "master"
-      npmOtp:
-        description: "It will provide the otp code to the npm publish"
-        required: true
       # npm-dist-tag:
       #   description: "It will add a npm tag to the module, like beta or next"
       #   required: false
