@@ -15,5 +15,7 @@
     "url": "git+https://github.com/Eomm/node-workshop-micro.git"
   },
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "standard": "^16.0.3"
+  }
 }

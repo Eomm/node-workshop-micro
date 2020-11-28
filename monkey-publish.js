@@ -4,7 +4,6 @@ const assert = require('assert').strict
 const pino = require('pino')
 const { validate } = require('../validation')
 const draft = require('./draft')
-const Npm = require('../npm')
 const GitDirectory = require('../git-directory')
 const GitHub = require('../github')
 const { editMessage } = require('../editor')
@@ -90,37 +89,12 @@ module.exports = async function (args) {
     throw new Error('You can not release a major version without --major flag')
   }
 
-  const npm = Npm(args.path)
-  await npm.ping() // check internet connection
-
-  const registry = await npm.config('registry')
-  const user = 'MONKEY PATCH'
-  logger.info('User: %s is preparing to release in registry %s', user, registry)
-
-  // check if the version we are releasing exists already
-  const moduleLink = `${releasing.name}@${releasing.version}`
-  let isAlreadyPublished = false
-  try {
-    isAlreadyPublished = (await npm.show(moduleLink, 'version')) === releasing.version
-  } catch (error) {
-    // if the module has been never released, the `show version` throws a 404
-    logger.warn('Unable to find module link %s', moduleLink)
-  }
-  if (isAlreadyPublished) {
-    throw new Error(`The module ${moduleLink} is already published in the registry ${registry}`)
-  }
-  logger.debug('The module %s is going to be published', moduleLink)
-
   // ? should use --allow-same-version (maybe someone want/has bumped manually)
-  await npm.version(releasing.version)
-  logger.debug('Bumped new version %s', releasing.version)
 
   // ! ******
   // ! DANGER ZONE: from this point if some error occurs we must explain to user what to do to fix
 
   // ? publish at the end??
-  await npm.publish({ tag: args.npmDistTag, access: args.npmAccess, otp: args.npmOtp })
-  logger.info('Published new module version %s', moduleLink)
 
   let commited
   try {
@@ -135,7 +109,7 @@ module.exports = async function (args) {
   } catch (error) {
     logger.error(error)
     const messageError = `Something went wrong pushing the package.json to git.
-The 'npm publish' has been done! Check your 'git status' and if necessary run 'npm unpublish ${moduleLink}'.
+The 'npm publish' has been done! Check your 'git status' and if necessary run 'npm unpublish ######'.
 Consider creating a release on GitHub by yourself with this message:\n${releasing.message}`
     throw new Error(messageError)
   }

@@ -33,28 +33,27 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
-        env:
-          GITHUB_OAUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - run: npm i releasify --no-save
-      - run: cp ./monkey.js ./node_modules/releasify/lib/commands/publish.js
-      - run: cp ./monkey-npm.js ./node_modules/releasify/lib/npm.js
+      - run: cp ./monkey-publish.js ./node_modules/releasify/lib/commands/publish.js
       - run: git config --global user.email "actions@users.noreply.github.com"
-      - run: git config --global user.name "${{github.event.sender.login}}"
+      - run: git config --global user.name "${{ github.actor }}"
       - run: npm config set //registry.npmjs.org/:_authToken=${NPM_TOKEN}
         env:
-          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
-      - run: npm whoami
-      - name: 'release now'
-        env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - run: npm whoami
+      - run: npm --no-git-tag-version --allow-same-version version ${{ github.event.inputs.semver }}
+      - uses: mmarchini-oss/npm-otp-publish@v0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_actor: ${{ github.actor }}
+          npm_token: ${{ secrets.NPM_TOKEN }}
+      - name: 'GH release'
         run: |
           ./node_modules/.bin/releasify \
             publish \
             --no-verify \
             --verbose debug \
-            --semver ${{github.event.inputs.semver}} \
-            --remote ${{github.event.inputs.remote}} \
-            --branch ${{github.event.inputs.branch}} \
-            --npm-otp ${{github.event.inputs.npmOtp}} \
-            --gh-token ${{secrets.GITHUB_TOKEN}}
+            --semver ${{ github.event.inputs.semver }} \
+            --remote ${{ github.event.inputs.remote }} \
+            --branch ${{ github.event.inputs.branch }} \
+            --gh-token ${{ secrets.GITHUB_TOKEN }}
