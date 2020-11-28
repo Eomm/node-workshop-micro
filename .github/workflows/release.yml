@@ -39,7 +39,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - run: npm whoami
       - run: npm --no-git-tag-version --allow-same-version version ${{ github.event.inputs.semver }}
-      - uses: mmarchini-oss/npm-otp-publish@v0
+      - uses: mmarchini-oss/npm-otp-publish@v0.16.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           github_actor: ${{ github.actor }}

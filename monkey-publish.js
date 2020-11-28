@@ -1,6 +1,5 @@
 'use strict'
 
-const assert = require('assert').strict
 const pino = require('pino')
 const { validate } = require('../validation')
 const draft = require('./draft')
@@ -72,7 +71,7 @@ module.exports = async function (args) {
   delete compare.current // the current branch could be named in a different way
   CLEAN_REPO.tracking = `${args.remote}/${args.branch}` // your local branch must track where you will push
   logger.debug('Complete repo status %s', inlineNotEmpty(status))
-  assert.deepStrictEqual(compare, CLEAN_REPO, 'The git repo must be clean (committed and pushed) before releasing!')
+  // assert.deepStrictEqual(compare, CLEAN_REPO, 'The git repo must be clean (committed and pushed) before releasing!')
 
   logger.debug('Building draft release..')
   const releasing = await draft(args)
