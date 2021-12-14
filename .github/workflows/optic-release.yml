@@ -20,4 +20,6 @@ jobs:
           npm-token: ${{ secrets.NPM_TOKEN }}
           optic-token: ${{secrets.OPTIC_TOKEN}}
           semver: ${{ github.event.inputs.semver }}
-          build-command: npm run build
+          build-command: |
+            npm install
+            npm run build
