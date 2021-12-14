@@ -5,6 +5,7 @@
   "main": "services/tickets.js",
   "scripts": {
     "test": "echo 'done'",
+    "build": "touch a-file.txt",
     "start": "fastify start -l info services/tickets.js",
     "dev": "fastify start -l info -P services/tickets.js"
   },
